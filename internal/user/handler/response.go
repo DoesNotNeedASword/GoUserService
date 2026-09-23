@@ -1,6 +1,7 @@
 package handler
 
+import "Test2/internal/user/model"
+
 type UsersListResponse struct {
-	ID   int64
-	Name string
+	Users []model.User
 }

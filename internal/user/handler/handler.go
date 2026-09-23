@@ -18,15 +18,15 @@ func New(service Service) *UserHandler {
 
 func (h *UserHandler) GetUsers(c *gin.Context) {
 	ctx := c.Request.Context()
-	user, err := h.service.GetUsers(ctx)
+	users, err := h.service.GetUsers(ctx)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, nil)
 	}
-	response := UsersListResponse{ID: user.ID, Name: user.Name}
+	response := UsersListResponse{Users: users}
 
 	c.IndentedJSON(http.StatusOK, response)
 }
 
 type Service interface {
-	GetUsers(context.Context) (model.User, error)
+	GetUsers(context.Context) ([]model.User, error)
 }
