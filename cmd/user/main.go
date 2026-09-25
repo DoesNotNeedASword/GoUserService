@@ -4,6 +4,7 @@ import (
 	"Test2/internal/shared/config"
 	"Test2/internal/shared/database"
 	"Test2/internal/shared/logger"
+	"Test2/internal/shared/migration"
 	"Test2/internal/user/handler"
 	"Test2/internal/user/repository"
 	"Test2/internal/user/service"
@@ -20,6 +21,7 @@ import (
 func main() {
 	cfg := config.Load()
 	logger := logger.New(cfg.LogLevel)
+	migration.Run(cfg.DatabaseURL, logger)
 	err := run(cfg, logger)
 	if err != nil {
 		log.Fatalln(err)
@@ -36,7 +38,6 @@ func run(cfg config.Config, log *slog.Logger) error {
 		return err
 	}
 	defer pool.Close()
-
 	repo := repository.New(pool)
 	service := service.New(repo)
 	handler := handler.New(service)
