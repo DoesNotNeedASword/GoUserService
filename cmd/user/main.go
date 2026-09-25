@@ -21,8 +21,8 @@ import (
 func main() {
 	cfg := config.Load()
 	logger := logger.New(cfg.LogLevel)
+	migration.Run(cfg.DatabaseURL, logger)
 	err := run(cfg, logger)
-	migration.Run(cfg.DatabaseURL, cfg.MigrationsPath, logger)
 	if err != nil {
 		log.Fatalln(err)
 	}
