@@ -5,7 +5,7 @@ import (
 	"Test2/internal/shared/database"
 	"Test2/internal/shared/logger"
 	"Test2/internal/shared/migration"
-	"Test2/internal/user/handler"
+	"Test2/internal/user/handler/http"
 	"Test2/internal/user/repository"
 	"Test2/internal/user/service"
 	"context"
@@ -40,9 +40,10 @@ func run(cfg config.Config, log *slog.Logger) error {
 	defer pool.Close()
 	repo := repository.New(pool)
 	service := service.New(repo)
-	handler := handler.New(service)
+	handler := http.New(service)
 	router.GET("/users", handler.GetUsers)
 	router.GET("/users/:id", handler.GetUser)
+	router.POST("/users", handler.CreateUser)
 
 	router.Run("localhost:8080")
 
