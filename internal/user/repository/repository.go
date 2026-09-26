@@ -59,7 +59,6 @@ func (r *UserRepository) GetUser(ctx context.Context, id int64) (*model.User, er
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, user.ErrNotFound
 		}
-		fmt.Fprintf(os.Stderr, "Error %v \n", err)
 		return nil, err
 	}
 	user := toDomain(u)

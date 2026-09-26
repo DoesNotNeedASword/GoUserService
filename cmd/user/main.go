@@ -39,7 +39,7 @@ func run(cfg config.Config, log *slog.Logger) error {
 	}
 	defer pool.Close()
 	repo := repository.New(pool)
-	service := service.New(repo)
+	service := service.New(repo, log)
 	handler := http.New(service)
 	router.GET("/users", handler.GetUsers)
 	router.GET("/users/:id", handler.GetUser)
