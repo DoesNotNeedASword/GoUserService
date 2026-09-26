@@ -1,4 +1,4 @@
-package handler
+package http
 
 import (
 	"Test2/internal/user/model"
@@ -40,12 +40,28 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, nil)
 	}
-	response := UserResponse{User: user}
+	response := UserResponse{User: *user}
 
 	c.JSON(http.StatusOK, response)
 }
 
+func (h *UserHandler) CreateUser(c *gin.Context) {
+	var req CreateUserRequest
+	ctx := c.Request.Context()
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	u := req.ToModel()
+	user, err := h.service.CreateUser(ctx, u)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, nil)
+	}
+	c.JSON(http.StatusCreated, user)
+}
+
 type Service interface {
 	GetUsers(context.Context) ([]model.User, error)
-	GetUser(ctx context.Context, id int64) (model.User, error)
+	GetUser(ctx context.Context, id int64) (*model.User, error)
+	CreateUser(ctx context.Context, u model.CreateUser) (*model.User, error)
 }

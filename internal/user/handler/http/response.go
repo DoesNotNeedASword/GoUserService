@@ -1,4 +1,4 @@
-package handler
+package http
 
 import "Test2/internal/user/model"
 
