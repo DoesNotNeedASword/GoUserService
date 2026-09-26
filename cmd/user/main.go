@@ -42,6 +42,7 @@ func run(cfg config.Config, log *slog.Logger) error {
 	service := service.New(repo)
 	handler := handler.New(service)
 	router.GET("/users", handler.GetUsers)
+	router.GET("/users/:id", handler.GetUser)
 
 	router.Run("localhost:8080")
 
