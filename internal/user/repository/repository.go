@@ -48,12 +48,11 @@ func (r *UserRepository) GetUsers(ctx context.Context) ([]model.User, error) {
 
 func (r *UserRepository) GetUser(ctx context.Context, id int64) (*model.User, error) {
 	var u User
-	const q = `select id, name, tg_id, party_id, created_at, last_active_at from users where id = $1`
+	const q = `select id, name, tg_id, created_at, last_active_at from users where id = $1`
 	err := r.pool.QueryRow(ctx, q, id).Scan(
 		&u.ID,
 		&u.Name,
 		&u.TgID,
-		&u.PartyID,
 		&u.CreatedAt,
 		&u.LastActiveAt)
 	if err != nil {
@@ -69,12 +68,11 @@ func (r *UserRepository) GetUser(ctx context.Context, id int64) (*model.User, er
 
 func (r *UserRepository) GetUserByTgID(ctx context.Context, tgID int64) (*model.User, error) {
 	var u User
-	const q = `select id, name, tg_id, party_id, created_at, last_active_at from users where tg_id = $1`
+	const q = `select id, name, tg_id, created_at, last_active_at from users where tg_id = $1`
 	err := r.pool.QueryRow(ctx, q, tgID).Scan(
 		&u.ID,
 		&u.Name,
 		&u.TgID,
-		&u.PartyID,
 		&u.CreatedAt,
 		&u.LastActiveAt)
 	if err != nil {
@@ -92,14 +90,13 @@ func (r *UserRepository) CreateUser(ctx context.Context, u model.CreateUser) (*m
 	const q = `
         INSERT INTO users (name, tg_id, phone)
         VALUES ($1, $2, $3)
-        RETURNING id, name, tg_id, party_id, phone, created_at, last_active_at`
+        RETURNING id, name, tg_id, phone, created_at, last_active_at`
 
 	var user model.User
 	err := r.pool.QueryRow(ctx, q, u.Name, u.TgID, u.Phone).Scan(
 		&user.ID,
 		&user.Name,
 		&user.TgID,
-		&user.PartyID,
 		&user.Phone,
 		&user.CreatedAt,
 		&user.LastActiveAt,
@@ -112,9 +109,8 @@ func (r *UserRepository) CreateUser(ctx context.Context, u model.CreateUser) (*m
 
 func toDomain(u User) model.User {
 	return model.User{
-		ID:      u.ID,
-		Name:    u.Name,
-		TgID:    u.TgID,
-		PartyID: u.PartyID,
+		ID:   u.ID,
+		Name: u.Name,
+		TgID: u.TgID,
 	}
 }

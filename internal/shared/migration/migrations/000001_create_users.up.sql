@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS users (
     name TEXT NOT NULL,
     phone TEXT NOT NULL,
     tg_id BIGINT NOT NULL UNIQUE,
-    party_id INT DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     last_active_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
