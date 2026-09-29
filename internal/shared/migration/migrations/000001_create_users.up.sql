@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE INDEX IF NOT EXISTS idx_users_last_active_at ON users (last_active_at);
 CREATE INDEX IF NOT EXISTS idx_users_tg_id ON users (tg_id);
-CREATE INDEX IF NOT EXISTS idx_users_party_id ON users (party_id);
 
 
 ALTER TABLE users
